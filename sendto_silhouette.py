@@ -114,6 +114,10 @@ else:   # linux
 
 # We will use the inkex module with the predefined Effect base class.
 import inkex
+try:
+    from lxml import etree
+except:
+    from inkex import etree
 from bezmisc import *
 from simpletransform import *
 import simplepath
@@ -619,7 +623,7 @@ class SendtoSilhouette(inkex.Effect):
                                         pass
                                 else:
                                         # Create a path with the outline of the rectangle
-                                        newpath = inkex.etree.Element( inkex.addNS( 'path', 'svg' ) )
+                                        newpath = etree.Element( inkex.addNS( 'path', 'svg' ) )
                                         x = float( node.get( 'x' ) )
                                         y = float( node.get( 'y' ) )
                                         w = float( node.get( 'width' ) )
@@ -631,12 +635,12 @@ class SendtoSilhouette(inkex.Effect):
                                         if t:
                                                 newpath.set( 'transform', t )
                                         a = []
-                                        a.append( ['M ', [x, y]] )
-                                        a.append( [' l ', [w, 0]] )
-                                        a.append( [' l ', [0, h]] )
-                                        a.append( [' l ', [-w, 0]] )
-                                        a.append( [' Z', []] )
-                                        newpath.set( 'd', simplepath.formatPath( a ) )
+                                        a.append( ['M', [x, y]] )
+                                        a.append( ['l', [w, 0]] )
+                                        a.append( ['l', [0, h]] )
+                                        a.append( ['l', [-w, 0]] )
+                                        a.append( ['Z', []] )
+                                        newpath.set( 'd', str(Path(a)) )
                                         self.plotPath( newpath, transform )
 
                         elif node.tag == inkex.addNS( 'line', 'svg' ) or node.tag == 'line':
@@ -662,7 +666,7 @@ class SendtoSilhouette(inkex.Effect):
                                         pass
                                 else:
                                         # Create a path to contain the line
-                                        newpath = inkex.etree.Element( inkex.addNS( 'path', 'svg' ) )
+                                        newpath = etree.Element( inkex.addNS( 'path', 'svg' ) )
                                         x1 = float( node.get( 'x1' ) )
                                         y1 = float( node.get( 'y1' ) )
                                         x2 = float( node.get( 'x2' ) )
@@ -674,9 +678,9 @@ class SendtoSilhouette(inkex.Effect):
                                         if t:
                                                 newpath.set( 'transform', t )
                                         a = []
-                                        a.append( ['M ', [x1, y1]] )
-                                        a.append( [' L ', [x2, y2]] )
-                                        newpath.set( 'd', simplepath.formatPath( a ) )
+                                        a.append( ['M', [x1, y1]] )
+                                        a.append( ['L', [x2, y2]] )
+                                        newpath.set( 'd', str(Path(a)) )
                                         self.plotPath( newpath, transform )
                                         if ( not self.bStopped ):       #an "index" for resuming plots quickly-- record last complete path
                                                 self.svgLastPath += 1
@@ -720,7 +724,7 @@ class SendtoSilhouette(inkex.Effect):
                                         d = "M " + pa[0]
                                         for i in range( 1, len( pa ) ):
                                                 d += " L " + pa[i]
-                                        newpath = inkex.etree.Element( inkex.addNS( 'path', 'svg' ) )
+                                        newpath = etree.Element( inkex.addNS( 'path', 'svg' ) )
                                         newpath.set( 'd', d );
                                         s = node.get( 'style' )
                                         if s:
@@ -772,7 +776,7 @@ class SendtoSilhouette(inkex.Effect):
                                         for i in range( 1, len( pa ) ):
                                                 d += " L " + pa[i]
                                         d += " Z"
-                                        newpath = inkex.etree.Element( inkex.addNS( 'path', 'svg' ) )
+                                        newpath = etree.Element( inkex.addNS( 'path', 'svg' ) )
                                         newpath.set( 'd', d );
                                         s = node.get( 'style' )
                                         if s:
@@ -836,7 +840,7 @@ class SendtoSilhouette(inkex.Effect):
                                                         '0 1 0 %f,%f ' % ( x2, cy ) + \
                                                         'A %f,%f ' % ( rx, ry ) + \
                                                         '0 1 0 %f,%f' % ( x1, cy )
-                                                newpath = inkex.etree.Element( inkex.addNS( 'path', 'svg' ) )
+                                                newpath = etree.Element( inkex.addNS( 'path', 'svg' ) )
                                                 newpath.set( 'd', d );
                                                 s = node.get( 'style' )
                                                 if s:
